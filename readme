@@ -1,0 +1,60 @@
+# <!-- *************React native Code**********->
+# <!-- Make a Project -->
+npx react-native init ChatApp
+# <!-- Navigation -->
+npm install @react-navigation/native
+npm install @react-navigation/stack
+npm install react-native-screens react-native-safe-area-context
+npx expo install react-native-gesture-handler react-native-reanimated
+npm i --save react-native-vector-icons
+# <!-- Redux -->
+npm install @reduxjs/toolkit
+npm install react-redux
+# <!-- Async storage -->
+npm install @react-native-async-storage/async-storage
+
+npm i react-native-image-picker
+
+npm i react-native-responsive-screen
+
+# <!-- Firebase -->
+npm install --save @react-native-firebase/app
+npm install @react-native-firebase/database @react-native-firebase/storage --save
+
+
+
+
+# <!-- *************Firebase***************** -->
+make Android project
+
+# in app.json
+"android": {
+      "googleServicesFile": "./google-services.json",
+     "package":"com.chatbox"
+
+      "permissions": [
+      "CAMERA",
+      "LOCATION",
+      "AUDIO_RECORDING",
+      "INTERNET",
+      "READ_PHONE_STATE"
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "8ccc33ed-6a98-49f3-b25a-3cc3ec7b1a9d"
+      }
+    }
+
+
+
+
+    #*************To make a built and run *******************************8
+<!-- ---in terminal----- -->
+
+<!-- for google signin you need to built anapp first -->
+<!-- built for android -->
+eas build --profile development --platform android
+
+<!-- to run app -->
+npx expo start --dev-client
+<!-- scan qr code copy the text url and paste in builted app -->
