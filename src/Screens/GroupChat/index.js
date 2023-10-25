@@ -7,11 +7,11 @@ import { app } from '../../firebaseConfig';
 import { getDatabase, onValue, push, ref, set } from '@firebase/database';
 import { FlatList } from 'react-native';
 
-const Chat = ({ route }) => {
+const GroupChat = ({ route }) => {
     const { receiver } = route.params;
     const { sender } = route.params;
     const Sender = sender.Name
-    const Receiver=receiver.Name
+    const Receiver = receiver.Name
     // console.log(receiver, "---reciever---");
     // console.log(Sender, "----sender-----");
     const [messages, setMessages] = useState([]);
@@ -37,7 +37,7 @@ const Chat = ({ route }) => {
                 const chatData = snapshot.val();
                 const chatMessages = Object.values(chatData);
                 setMessages(chatMessages);
-                // console.log(chatRef, "--------");
+                console.log(chatMessages, "--------");
             }
             // console.log("----end if----");
         });
@@ -54,8 +54,8 @@ const Chat = ({ route }) => {
     const send = () => {
         const chatRoomRef1 = ref(rtdb, `ChatList/${Receiver}/Messages`);
         const newMessageRef1 = push(chatRoomRef1);
-        const chatRoomRef2 = ref(rtdb, `ChatList/${Sender}/Messages`);
-        const newMessageRef2 = push(chatRoomRef2);
+        // const chatRoomRef2 = ref(rtdb, `ChatList/${Sender}/Messages`);
+        // const newMessageRef2 = push(chatRoomRef2);
         const messageData = {
             text: newMessage,
             timestamp: new Date().getTime(),
@@ -63,14 +63,14 @@ const Chat = ({ route }) => {
             Reciever: receiver.Name
         };
         set(newMessageRef1, messageData);
-        set(newMessageRef2, messageData);
+        // set(newMessageRef2, messageData);
         const LastChatRef1 = ref(rtdb, `ChatList/${Receiver}/lastMsg`);
         set(LastChatRef1, newMessage);
-        const LastChatRef2 = ref(rtdb, `ChatList/${Sender}/lastMsg`);
-        set(LastChatRef2, newMessage);
+        // const LastChatRef2 = ref(rtdb, `ChatList/${Sender}/lastMsg`);
+        // set(LastChatRef2, newMessage);
         setNewMessage('');
     };
-    const detailOfChat=(()=>{
+    const detailOfChat = (() => {
         if (receiver.Members !== null && Array.isArray(receiver.Members)) {
             const membersList = receiver.Members.join('\n'); // Join members as a string
             Alert.alert('Members List', membersList);
@@ -79,26 +79,31 @@ const Chat = ({ route }) => {
     return (
         <View style={styles.Container}>
             <View style={styles.ChatWith}>
-                <TouchableOpacity onPress={()=>detailOfChat()}>
-                <Text style={{ color: '#87332A', fontSize: 30, marginLeft: 10 }}> {Receiver}</Text>
+                <TouchableOpacity onPress={() => detailOfChat()}>
+                    <Text style={{ color: '#87332A', fontSize: 30, marginLeft: 10 }}>Group {Receiver}</Text>
                 </TouchableOpacity>
             </View>
             <View style={styles.MsgBox}>
                 <View >
                     <FlatList
-                        data={messages.filter(item => item.Sender === Receiver || item.Sender === Sender)}
+                        data={messages}
                         keyExtractor={(item, index) => index.toString()}
 
                         renderItem={({ item }) => {
+                            console.log(item.Sender)
                             // console.log(item, "----sender----", item.Sender, "---reciever---", item.Reciever)
                             return (
                                 <View style={{ flexDirection: item.Sender === Sender ? 'row-reverse' : 'row' }}>
                                     <View style={item.Sender === Sender ? styles.senderMessage : styles.receiverMessage}>
                                         <Text style={styles.messageText}>{item.text}</Text>
-                                        <View style={styles.timeMsg}>
-                                            <Text style={styles.timestamp}>{dateFormat(item.timestamp)}</Text>
-                                        </View>
+                                        <Text style={styles.messageSender}>{item.Sender}   {dateFormat(item.timestamp)}</Text>
+                                        {/* <View style={styles.timeMsg}>
+                                       
+                                    <Text style={styles.timestamp}>{dateFormat(item.timestamp)}</Text>
+                                  
+                                        </View> */}
                                     </View>
+
                                 </View>
                             )
                         }
@@ -126,4 +131,4 @@ const Chat = ({ route }) => {
     );
 }
 
-export default Chat
+export default GroupChat

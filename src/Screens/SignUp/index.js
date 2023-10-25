@@ -16,12 +16,11 @@ import { get, getDatabase, onValue, ref, set } from '@firebase/database'
 
 const Signup = () => {
     const rtdatabase = getDatabase(app)
-    // const senderId = v4();
-    // const valid=validate(senderId)
-    // console.log(senderId, valid);
-    const [currentUser,setCurrentUser]=useState("")
+    const [currentUser, setCurrentUser] = useState("")
     const [Name, setName] = useState('')
+    const [members, setMembers] = useState([]);
     const Navigation = useNavigation()
+    // setMembers(Name)
     const fetchData = async () => {
         try {
             const chatListRef = ref(rtdatabase, 'ChatList');
@@ -29,7 +28,7 @@ const Signup = () => {
             onValue(chatListRef, (snapshot) => {
                 if (snapshot.exists()) {
                     const chatListData = snapshot.val();
-                    console.log('---Chat List Data:', chatListData);
+                    // console.log('---Chat List Data:', chatListData);
                 } else {
                     console.log('Chat List node does not exist or is empty.');
                 }
@@ -51,8 +50,9 @@ const Signup = () => {
             const newDocData = {
                 Name: Name,
                 Time: new Date().getTime(),
-                Messages:[],
-                lastMsg:""
+                Messages: [],
+                lastMsg: "",
+                Members:[Name]
                 // senderId:senderId
             };
             const userRef = ref(rtdatabase, 'ChatList/' + Name);
@@ -63,12 +63,12 @@ const Signup = () => {
                 console.log('Name document already exists.');
                 const chatListData = snapshot.val();
                 setCurrentUser(chatListData)
-                console.log('current:', chatListData.Name);
-                Navigation.navigate("home",{data:chatListData})
+                // console.log('current:', chatListData.Name);
+                Navigation.navigate("home", { data: chatListData })
             } else {
                 await set(userRef, newDocData);
-                console.log('Document added with ID: ', Name);
-                Navigation.navigate("home",{data:newDocData})
+                // console.log('Document added with ID: ', Name);
+                Navigation.navigate("home", { data: newDocData })
                 // setShow(false);
                 setName('');
             }

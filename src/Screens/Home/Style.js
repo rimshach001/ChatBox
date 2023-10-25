@@ -25,7 +25,7 @@ const styles = StyleSheet.create({
     top: {
         fontSize: 40,
         color: '#87332A',
-        marginLeft: 100
+        marginLeft: 40
     },
    
     chats: {
